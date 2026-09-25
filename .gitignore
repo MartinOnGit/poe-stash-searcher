@@ -1,5 +1,5 @@
-### Vert.x ###
-.vertx/
+# application configuration contains secrets
+src/main/resources/application.properties
 
 ### Eclipse ###
 

@@ -22,4 +22,6 @@ default to StashExportMain
 
 ## POE API
 
-POE public API requires an Oauth application key, but GGG is curently unable to process new application demands so this application uses, for now, the legagy API and relies on an access token from the official website
+POE public API requires an Oauth application key, but GGG is curently unable to process new application demands so this application uses, for now, the legagy API and relies on an access token from the official website.
+
+The account and sessionId must be defined in the `application.properties`.
