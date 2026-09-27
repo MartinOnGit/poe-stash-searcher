@@ -6,6 +6,7 @@ import java.net.URI;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CompletableFuture;
@@ -32,7 +33,7 @@ public class Client {
         this.accountName = accountName;
     }
 
-    public CompletableFuture<String> getStashTab(int tabIndex) {
+    public CompletableFuture<StashTab> getStashTab(int tabIndex) {
         StringBuilder uriBuilder = new StringBuilder();
         uriBuilder
             .append("https://www.pathofexile.com/character-window/get-stash-items?accountName=")
@@ -44,7 +45,9 @@ public class Client {
             .header("Accept", "application/json")
             .GET()
             .build();
-        return client.sendAsync(request, BodyHandlers.ofString()).thenApply(response -> response.body());
+        return client.sendAsync(request, BodyHandlers.ofString())
+            .thenApply(HttpResponse::body)
+            .thenApply(StashTab::read);
     }
 
 }

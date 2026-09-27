@@ -29,7 +29,7 @@ public class StashExportMain {
     log.info("application properties loaded");
     poeApiClient =  new Client(applicationProperties.getProperty("poe.account"), applicationProperties.getProperty("poe.session.id"));
     log.info("poe api client instanciated");
-    Flowable.fromFuture(poeApiClient.getStashTab(0)).blockingSubscribe(log::info);
+    Flowable.fromFuture(poeApiClient.getStashTab(0)).blockingSubscribe(tab -> {log.info(tab.toString());});
   }
 
 }
