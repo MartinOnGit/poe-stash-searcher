@@ -35,6 +35,6 @@ public class StashTab {
 
     @Override
     public String toString() {
-        return "StashTab(" + numTabs + ", " + items + ")";
+        return "StashTab(" + numTabs + ", " + items.size() + ")";
     }
 }

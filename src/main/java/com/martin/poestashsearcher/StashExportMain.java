@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import com.martin.poestashsearcher.poeapi.Client;
 
 import io.reactivex.rxjava3.core.*;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class StashExportMain {
 
@@ -29,7 +30,13 @@ public class StashExportMain {
     log.info("application properties loaded");
     poeApiClient =  new Client(applicationProperties.getProperty("poe.account"), applicationProperties.getProperty("poe.session.id"));
     log.info("poe api client instanciated");
-    Flowable.fromFuture(poeApiClient.getStashTab(0)).blockingSubscribe(tab -> {log.info(tab.toString());});
+    Flowable.fromFuture(poeApiClient.getStashSize())
+      .flatMap(stashSize -> Flowable.range(0, stashSize))
+      .parallel()
+      .runOn(Schedulers.io())
+      .flatMap(tabIndex -> Flowable.fromFuture(poeApiClient.getStashTab(tabIndex)))
+      .sequential()
+      .blockingSubscribe(tab -> {log.info(tab.toString());});
   }
 
 }
