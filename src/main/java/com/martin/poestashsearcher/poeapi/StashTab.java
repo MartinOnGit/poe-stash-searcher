@@ -7,10 +7,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import tools.jackson.databind.ObjectMapper;
 
-
 public class StashTab {
 
-    static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     int numTabs;
     List<Item> items;
@@ -25,7 +24,7 @@ public class StashTab {
         return numTabs;
     }
 
-   public List<Item> getItems() {
+    public List<Item> getItems() {
         return items;
     }
 

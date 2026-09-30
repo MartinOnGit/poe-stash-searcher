@@ -10,7 +10,7 @@ public class Item {
     String name;
     String baseType;
 
-    ObjectMapper objectMapper = new ObjectMapper();
+    private final static ObjectMapper objectMapper = new ObjectMapper();
 
     @JsonCreator
     public Item(@JsonProperty("name") String name, @JsonProperty("baseType") String baseType) {
@@ -26,7 +26,7 @@ public class Item {
         return baseType;
     }
 
-    public Item read(String json) {
+    public static Item read(String json) {
         return objectMapper.readValue(json, Item.class);
     }
 
