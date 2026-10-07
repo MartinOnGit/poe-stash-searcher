@@ -11,8 +11,8 @@ public class StashTab {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    int numTabs;
-    List<Item> items;
+    final int numTabs;
+    final List<Item> items;
 
     @JsonCreator
     public StashTab(@JsonProperty("numTabs") int numTabs, @JsonProperty("items") List<Item> items) {
