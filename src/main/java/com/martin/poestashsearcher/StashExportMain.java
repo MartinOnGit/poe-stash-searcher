@@ -1,6 +1,5 @@
 package com.martin.poestashsearcher;
 
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -17,20 +16,19 @@ public class StashExportMain {
 
   private final static Logger log = LoggerFactory.getLogger(StashExportMain.class);
 
-  static Client poeApiClient;
-
   public static void main(String[] args) {
     Properties applicationProperties = new Properties();
     try {
       applicationProperties.load(
-        new FileInputStream(StashExportMain.class.getClassLoader().getResource("application.properties").getFile()));
+          new FileInputStream(StashExportMain.class.getClassLoader().getResource("application.properties").getFile()));
     } catch (IOException e) {
       log.error("Could not log configuration file, shutting down.", e);
       System.exit(1);
     }
     log.info("application properties loaded");
-    
-    poeApiClient =  new Client(applicationProperties.getProperty("poe.account"), applicationProperties.getProperty("poe.session.id"));
+
+    Client poeApiClient = new Client(applicationProperties.getProperty("poe.account"),
+        applicationProperties.getProperty("poe.session.id"));
     log.info("poe api client instanciated");
 
     poeApiClient.getStashSize()
@@ -39,7 +37,14 @@ public class StashExportMain {
         .runOn(Schedulers.io())
         .flatMap(tabIndex -> poeApiClient.getStashTab(tabIndex))
         .sequential()
-        .blockingSubscribe(tab -> {log.info(tab.toString());});
+        .blockingSubscribe(tab -> log.info(tab.toString()));
+
+    try {
+      poeApiClient.close();
+    } catch (Exception e) {
+      log.error("An error occured while trying to close http client, resources might have leaked.", e);
+      System.exit(1);
+    }
   }
 
 }

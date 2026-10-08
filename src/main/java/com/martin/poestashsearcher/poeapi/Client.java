@@ -16,7 +16,7 @@ import com.martin.poestashsearcher.StashExportMain;
 
 import io.reactivex.rxjava3.core.Flowable;
 
-public class Client {
+public class Client implements AutoCloseable {
 
     HttpClient client;
 
@@ -45,7 +45,7 @@ public class Client {
         ReactiveRequest request = ReactiveRequest
                 .newBuilder(client.newRequest("https://www.pathofexile.com").path("character-window/get-stash-items")
                         .param("accountName", accountName)
-                        .param("realm","pc")
+                        .param("realm", "pc")
                         .param("league", "Allflame")
                         .param("tabs", "1")
                         .param("tabIndex", Integer.toString(tabIndex)))
@@ -63,7 +63,7 @@ public class Client {
         ReactiveRequest request = ReactiveRequest
                 .newBuilder(client.newRequest("https://www.pathofexile.com").path("character-window/get-stash-items")
                         .param("accountName", accountName)
-                        .param("realm","pc")
+                        .param("realm", "pc")
                         .param("league", "Allflame")
                         .param("tabs", "1")
                         .param("tabIndex", "0"))
@@ -77,11 +77,16 @@ public class Client {
     }
 
     private String okContentOrMessage(Result<String> response, String message) throws ClientHttpException {
-        if(response.response().getStatus() == HttpStatus.OK_200) {
+        if (response.response().getStatus() == HttpStatus.OK_200) {
             return response.content();
         } else {
             throw new ClientHttpException(message + " : " + response.response().getStatus() + " - " + response.content());
         }
+    }
+
+    @Override
+    public void close() throws Exception {
+        client.close();
     }
 
 }
